@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>WhatsBot</title>
+<style>
+body {
+    background: #0b141a;
+    color: white;
+    font-family: Arial;
+}
+.container {
+    max-width: 500px;
+    margin: auto;
+    margin-top: 30px;
+}
+.chat-box {
+    background: #202c33;
+    padding: 10px;
+    border-radius: 10px;
+    height: 300px;
+    overflow-y: auto;
+}
+.message {
+    background: #005c4b;
+    padding: 8px;
+    margin: 5px;
+    border-radius: 8px;
+    width: fit-content;
+}
+.bot {
+    background: #2a3942;
+}
+input {
+    width: 75%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+}
+button {
+    padding: 10px;
+    background: #25D366;
+    border: none;
+    border-radius: 8px;
+    color: white;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>🤖 WhatsBot</h2>
+<div id="chat" class="chat-box"></div>
+<input id="name" placeholder="اسمك"><br>
+<input id="msg" placeholder="اكتب رسالة"><br>
+<button onclick="send()">إرسال</button>
+</div>
+<script>
+function addMessage(text, type="user") {
+    let chat = document.getElementById("chat");
+    let msg = document.createElement("div");
+    msg.className = "message " + (type === "bot" ? "bot" : "");
+    msg.innerText = text;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+}
+function send() {
+    let name = document.getElementById("name").value;
+    let msg = document.getElementById("msg").value;
+    addMessage(msg, "user");
+    fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({name: name, message: msg})
+    })
+    .then(res => res.json())
+    .then(data => {
+        addMessage(data.reply, "bot");
+    });
+    document.getElementById("msg").value = "";
+}
+</script>
+</body>
+</html>
