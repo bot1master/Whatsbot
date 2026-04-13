@@ -39,7 +39,7 @@ def chat():
     elif user_state.get(sender) == "ai":
         try:
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-mini",
+                model="gpt-40-mini",
                 messages=[{"role": "user", "content": incoming_msg}]
             )
             reply = response.choices[0].message.content
@@ -47,9 +47,7 @@ def chat():
         except Exception as e:
             print (e)
             msg.body("❌ حصل خطأ في الذكاء")
-            return Response(str(resp), mimetype="application/xml")
-        except:
-            msg.body("❌ حصل خطأ في الذكاء")
+            return Response(str(resp), mimetype="application/xml") ✅
     elif user_state.get(sender) == "order":
         with open("orders.txt", "a") as f:
             f.write(f"{sender}: {incoming_msg}\n")
@@ -57,8 +55,7 @@ def chat():
         msg.body("✅ تم تسجيل طلبك")
     else:
         msg.body("❌ اكتب menu")
-        return Response(str(resp), mimetype="application/xml")
-    return str(resp)
+    return Response(str(resp), mimetype="application/xml")
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
