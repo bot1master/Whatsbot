@@ -40,7 +40,6 @@ def chat():
         try:
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-mini",
-                model="gpt-4o-mini",
                 messages=[{"role": "user", "content": incoming_msg}]
             )
             reply = response.choices[0].message.content
