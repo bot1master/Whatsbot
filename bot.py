@@ -1,9 +1,11 @@
 from flask import Flask, request, Response
+from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 import os
 import openai
 app = Flask(__name__)
 openai.api_key = os.getenv("YOUR_OPENAI_KEY")
+openai.api_key = "YOUR_OPENAI_KEY"
 user_state = {}
 @app.route("/")
 def home():
@@ -38,6 +40,7 @@ def chat():
         try:
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-mini",
+                model="gpt-4o-mini",
                 messages=[{"role": "user", "content": incoming_msg}]
             )
             reply = response.choices[0].message.content
@@ -46,6 +49,8 @@ def chat():
             print (e)
             msg.body("❌ حصل خطأ في الذكاء")
             return Response(str(resp), mimetype="application/xml")
+        except:
+            msg.body("❌ حصل خطأ في الذكاء")
     elif user_state.get(sender) == "order":
         with open("orders.txt", "a") as f:
             f.write(f"{sender}: {incoming_msg}\n")
@@ -54,6 +59,7 @@ def chat():
     else:
         msg.body("❌ اكتب menu")
         return Response(str(resp), mimetype="application/xml")
+    return str(resp)
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
