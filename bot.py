@@ -4,7 +4,6 @@ import os
 from openai import OpenAI
 client = OpenAI()
 app = Flask(__name__)
-openai.api_key = os.getenv("OPENAI_API_KEY")
 user_state = {}
 @app.route("/")
 def home():
