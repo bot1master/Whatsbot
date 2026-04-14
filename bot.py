@@ -35,7 +35,7 @@ def chat():
     elif user_state.get(sender) == "ai":
         try:
             response = client.Chat.Completions.create(
-                model="gpt-4o-mini",
+                model="gpt-3.5-turbo"
                 messages=[
                     {"role": "user", "content": incoming_msg}
                 ]
