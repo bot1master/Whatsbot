@@ -1,7 +1,8 @@
 from flask import Flask, request, Response
 from twilio.twiml.messaging_response import MessagingResponse
 import os
-import openai
+from openai import OpenAI
+client = OpenAI()
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 user_state = {}
@@ -34,8 +35,8 @@ def chat():
         msg.body("اكتب سؤالك")
     elif user_state.get(sender) == "ai":
         try:
-            response = openai.ChatCompletion.create(
-                model = "gpt-3.5-turbo",
+            response = client.Chat.Completions.create(
+                model = "gpt-40-mini",
                 messages=[
                     {"role": "user", "content": incoming_msg}
                 ]
